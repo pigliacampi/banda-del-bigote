@@ -1,0 +1,3796 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Torneo La Banda del Bigote - Jornada 4</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 119, 198, 0.2) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: 
+                0 32px 64px rgba(0, 0, 0, 0.12),
+                0 0 0 1px rgba(255, 255, 255, 0.2);
+            margin-top: 20px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .champions-trophy {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            width: 80px;
+            height: 80px;
+            z-index: 10;
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.2));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 30% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 30%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .header h1 {
+            font-size: 3.2em;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 8px;
+            text-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.3),
+                0 0 20px rgba(255, 255, 255, 0.2);
+            letter-spacing: -0.02em;
+            background: linear-gradient(45deg, #ffffff, #f0f0f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header h2 {
+            font-size: 1.4em;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 2;
+        }
+
+        .tabs {
+            display: flex;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            border-radius: 15px 15px 0 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 0;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 18px 24px;
+            background: none;
+            border: none;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            color: rgba(255, 255, 255, 0.7);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .tab:last-child {
+            border-right: none;
+        }
+
+        .tab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: -1;
+        }
+
+        .tab.active {
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .tab.active::before {
+            opacity: 1;
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 3px;
+            background: linear-gradient(90deg, #ffd700 0%, #ff6b6b 100%);
+            border-radius: 2px;
+        }
+
+        .tab:hover:not(.active) {
+            color: rgba(255, 255, 255, 0.9);
+            transform: translateY(-1px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .tab:hover:not(.active)::before {
+            opacity: 0.2;
+        }
+
+        /* Banner Shields Styles */
+        .banner-shields {
+            margin-top: 30px;
+            padding: 20px 0;
+        }
+
+        .shields-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .banner-shield {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .banner-shield::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 50%;
+        }
+
+        .banner-shield:hover {
+            transform: scale(1.15) translateY(-5px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .banner-shield:hover::before {
+            opacity: 0.2;
+        }
+
+        .banner-shield img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 50%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .banner-shield:nth-child(odd) {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .banner-shield:nth-child(even) {
+            animation: float 3s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* Responsive para escudos en banner */
+        @media (max-width: 768px) {
+            .banner-shield {
+                width: 50px;
+                height: 50px;
+                padding: 6px;
+            }
+            
+            .shields-container {
+                gap: 10px;
+            }
+            
+            .banner-player-photo {
+                width: 65px;
+                height: 65px;
+                padding: 8px;
+            }
+            
+            .players-photos-container {
+                gap: 12px;
+            }
+        }
+
+        /* Players Photos in Banner Styles */
+        .players-photos-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 18px;
+            max-width: 1000px;
+            margin: 25px auto 0;
+            padding: 15px 0;
+        }
+
+        .banner-player-photo {
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+            padding: 10px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .banner-player-photo::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 50%;
+        }
+
+        .banner-player-photo:hover {
+            transform: scale(1.2) translateY(-8px);
+            box-shadow: 0 12px 35px rgba(255, 215, 0, 0.4);
+            border-color: #ffd700;
+        }
+
+        .banner-player-photo:hover::before {
+            opacity: 0.15;
+        }
+
+        .banner-player-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .banner-player-photo .player-initial {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8em;
+            font-weight: 800;
+            color: #667eea;
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-radius: 50%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .banner-player-photo:nth-child(odd) {
+            animation: playerFloat 4s ease-in-out infinite;
+        }
+
+        .banner-player-photo:nth-child(even) {
+            animation: playerFloat 4s ease-in-out infinite reverse;
+        }
+
+        @keyframes playerFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+        }
+
+        /* Shields Gallery Styles */
+        .shields-section {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .shields-description {
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .shields-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .shield-card {
+            background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 20px;
+            padding: 25px 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shield-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .shield-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2);
+        }
+
+        .shield-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .shield-logo {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin: 0 auto 15px;
+            display: block;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .shield-card:hover .shield-logo {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .shield-name {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: #2c3e50;
+            text-transform: capitalize;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 2;
+            transition: color 0.3s ease;
+        }
+
+        .shield-card:hover .shield-name {
+            color: #667eea;
+        }
+
+        .shield-league {
+            font-size: 0.9em;
+            color: #7f8c8d;
+            font-weight: 500;
+            position: relative;
+            z-index: 2;
+        }
+
+        .shields-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .shields-stat {
+            text-align: center;
+        }
+
+        .shields-stat-number {
+            font-size: 2em;
+            font-weight: 800;
+            color: #667eea;
+            display: block;
+        }
+
+        .shields-stat-label {
+            font-size: 0.9em;
+            color: #6c757d;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 40px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Baneos Styles */
+        .team-selection {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .team-card {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            border-radius: 20px;
+            padding: 30px;
+            color: white;
+            box-shadow: 0 12px 24px rgba(255, 107, 107, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .team-card:nth-child(2) {
+            background: linear-gradient(135deg, #4834d4 0%, #686de0 100%);
+            box-shadow: 0 12px 24px rgba(72, 52, 212, 0.3);
+        }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .team-card h3 {
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 1em;
+            font-weight: 500;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .form-group select:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+        }
+
+        .team-preview {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            text-align: center;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .team-preview img {
+            width: 40px;
+            height: 40px;
+            margin-right: 12px;
+        }
+
+        .team-preview span {
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .ban-button {
+            display: block;
+            width: 300px;
+            margin: 40px auto;
+            padding: 18px 36px;
+            background: linear-gradient(135deg, #2ed573 0%, #1e90ff 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 24px rgba(46, 213, 115, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .ban-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(46, 213, 115, 0.4);
+        }
+
+        .ban-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .results-section {
+            margin-top: 40px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .results-section.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .results-title {
+            text-align: center;
+            font-size: 2.2em;
+            font-weight: 800;
+            color: #333;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .results-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .team-results {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .team-results h4 {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.4em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .team-results h4 img {
+            width: 35px;
+            height: 35px;
+        }
+
+        .team-results:first-child h4 {
+            color: #ff6b6b;
+        }
+
+        .team-results:last-child h4 {
+            color: #4834d4;
+        }
+
+        .banned-player {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 12px;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.3s ease;
+        }
+
+        .banned-player.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .banned-player.banned {
+            color: #dc2626;
+            text-shadow: 0 0 8px rgba(220, 38, 38, 0.5);
+            animation: banPulse 0.6s ease-out;
+        }
+
+        .banned-player .position-tag {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.8em;
+            font-weight: 600;
+            color: white;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .position-tag.delantero { background: #ff6b6b; }
+        .position-tag.mediocampista { background: #4834d4; }
+        .position-tag.defensa { background: #2ed573; }
+        .position-tag.portero { background: #ffa502; }
+
+        @keyframes banPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(220, 38, 38, 0.6); }
+            100% { transform: scale(1); }
+        }
+
+        .reiniciar-button {
+            display: block;
+            margin: 30px auto 0;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .reiniciar-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(255, 107, 107, 0.3);
+        }
+
+        /* Partidos Styles */
+        .matches-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 2em;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .match-card {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: transform 0.3s ease;
+        }
+
+        .match-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .match-teams {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex: 1;
+        }
+
+        .team-selector {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .team-selector span {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .team-selector select {
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.9em;
+            background: white;
+            min-width: 120px;
+        }
+
+        .team-selector-with-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 5px;
+        }
+
+        .team-selector-with-logo img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .team-selector-with-logo span {
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        .vs-divider {
+            font-size: 1.5em;
+            font-weight: 800;
+            color: #666;
+            margin: 0 15px;
+        }
+
+        .score-inputs {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .score-inputs input {
+            width: 50px;
+            padding: 8px;
+            text-align: center;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .score-divider {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .update-button {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #2ed573 0%, #1e90ff 100%);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .update-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(46, 213, 115, 0.3);
+        }
+
+        .playoffs-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .playoff-match {
+            background: linear-gradient(135deg, #ffd700 0%, #ffb347 100%);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 24px rgba(255, 215, 0, 0.3);
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .playoff-teams-new {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .playoff-team-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+        }
+
+        .playoff-team {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.2em;
+            padding: 15px 20px;
+            border-radius: 12px;
+            transition: all 0.5s ease;
+            border: 2px solid transparent;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .playoff-team.winner {
+            background: linear-gradient(135deg, #2ed573, #17c0eb);
+            color: white;
+            border: 2px solid #2ed573;
+            box-shadow: 0 4px 12px rgba(46, 213, 115, 0.4);
+            transform: scale(1.05);
+            animation: winnerGlow 1s ease-in-out;
+        }
+
+        .playoff-team.loser {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: 2px solid #ff6b6b;
+            opacity: 0.7;
+            transform: scale(0.95);
+            animation: loserFade 1s ease-in-out;
+        }
+
+        .playoff-score-input {
+            width: 60px;
+            height: 60px;
+            padding: 0;
+            text-align: center;
+            border: 3px solid rgba(255, 255, 255, 0.5);
+            border-radius: 12px;
+            font-size: 1.5em;
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .playoff-score-input:focus {
+            outline: none;
+            border-color: #ffd700;
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3);
+        }
+
+        .penalty-section {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            display: none;
+        }
+
+        .penalty-section.show {
+            display: block;
+            animation: fadeInPenalty 0.5s ease;
+        }
+
+        @keyframes fadeInPenalty {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .penalty-title {
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .penalty-inputs {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .penalty-team {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .penalty-team span {
+            font-weight: 600;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .penalty-input {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+            font-size: 1.3em;
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+        }
+
+        .penalty-input:focus {
+            outline: none;
+            border-color: #ffd700;
+            box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.3);
+        }
+
+        .vs-divider-playoff {
+            font-size: 2em;
+            font-weight: 900;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 15px;
+            border-radius: 50%;
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes winnerGlow {
+            0% { box-shadow: 0 4px 12px rgba(46, 213, 115, 0.4); }
+            50% { box-shadow: 0 8px 24px rgba(46, 213, 115, 0.8); }
+            100% { box-shadow: 0 4px 12px rgba(46, 213, 115, 0.4); }
+        }
+
+        @keyframes loserFade {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 0.7; }
+        }
+
+        .final-section {
+            background: linear-gradient(135deg, #8e44ad 0%, #3742fa 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 30px;
+            text-align: center;
+            box-shadow: 0 12px 32px rgba(142, 68, 173, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .final-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 30% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 30%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .final-title {
+            font-size: 2.5em;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 2;
+        }
+
+        .stats-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .stats-overlay.show {
+            display: flex;
+        }
+
+        .stats-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            color: white;
+            position: relative;
+            animation: statsSlideIn 0.5s ease;
+        }
+
+        @keyframes statsSlideIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .stats-title {
+            font-size: 2.5em;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-card h3 {
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-align: center;
+            color: #ffd700;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .stat-description {
+            text-align: center;
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .stats-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2em;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .stats-close:hover {
+            transform: scale(1.2);
+        }
+
+        /* Tabla Styles */
+        .table-container {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(20px);
+        }
+
+        .table-title {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            font-size: 2em;
+            font-weight: 700;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .standings-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .standings-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 10px;
+            font-weight: 600;
+            text-align: center;
+            font-size: 0.9em;
+        }
+
+        .standings-table td {
+            padding: 15px 10px;
+            text-align: center;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+        }
+
+        .standings-table tr:hover {
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .player-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            justify-content: flex-start;
+            padding-left: 20px;
+        }
+
+        .player-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1em;
+        }
+
+        .player-avatar.ervin { background: linear-gradient(135deg, #ff6b6b, #ee5a24); }
+        .player-avatar.joaquin { background: linear-gradient(135deg, #4834d4, #686de0); }
+        .player-avatar.gianluca { background: linear-gradient(135deg, #2ed573, #17c0eb); }
+        .player-avatar.mauro { background: linear-gradient(135deg, #ffa502, #ff6348); }
+        .player-avatar.roberto { background: linear-gradient(135deg, #8e44ad, #3742fa); }
+
+        .position-number {
+            font-weight: 700;
+            color: #667eea;
+            min-width: 30px;
+        }
+
+        .positive { color: #2ed573; font-weight: 600; }
+        .negative { color: #ff6b6b; font-weight: 600; }
+
+        /* NUEVA PESTAÑA: Jugadores Styles */
+        .players-section {
+            padding: 0;
+        }
+
+        .players-header {
+            background: linear-gradient(135deg, #2ed573 0%, #17c0eb 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            margin: -40px -40px 40px -40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .players-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 30% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 30%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .players-header h2 {
+            font-size: 2.5em;
+            font-weight: 900;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 2;
+        }
+
+        .players-header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+
+        .search-filters {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 15px 20px 15px 50px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            font-size: 1em;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #2ed573;
+            box-shadow: 0 0 0 3px rgba(46, 213, 115, 0.2);
+        }
+
+        .search-box::before {
+            content: '🔍';
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2em;
+            z-index: 1;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #2ed573 0%, #17c0eb 100%);
+            color: white;
+            border-color: #2ed573;
+        }
+
+        .filter-btn:hover:not(.active) {
+            border-color: #2ed573;
+            color: #2ed573;
+        }
+
+        .players-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .player-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .player-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+            border-color: #2ed573;
+        }
+
+        .player-card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .player-card-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 900;
+            font-size: 1.5em;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .player-card-info h3 {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .player-card-info .player-subtitle {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .teams-section {
+            margin-bottom: 20px;
+        }
+
+        .teams-section h4 {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .teams-list {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .team-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            border: 1px solid #dee2e6;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .team-badge:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .team-badge img {
+            width: 24px;
+            height: 24px;
+        }
+
+        .team-badge span {
+            font-size: 0.9em;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .squad-preview {
+            background: rgba(46, 213, 115, 0.05);
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid rgba(46, 213, 115, 0.2);
+        }
+
+        .squad-preview h5 {
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #2ed573;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .position-group {
+            margin-bottom: 12px;
+        }
+
+        .position-group strong {
+            font-size: 0.8em;
+            color: #666;
+            display: block;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .players-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .player-pill {
+            background: white;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.8em;
+            color: #333;
+            border: 1px solid #ddd;
+            transition: all 0.2s ease;
+        }
+
+        .player-pill:hover {
+            background: #2ed573;
+            color: white;
+            border-color: #2ed573;
+        }
+
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-item .stat-number {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #2ed573;
+            display: block;
+        }
+
+        .stat-item .stat-label {
+            font-size: 0.7em;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .no-results h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .no-results p {
+            font-size: 1em;
+            opacity: 0.8;
+        }
+
+        /* Champion Animation */
+        .champion-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .champion-overlay.show {
+            display: flex;
+        }
+
+        @keyframes championBackground {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .champion-content {
+            text-align: center;
+            color: white;
+            animation: championBounce 1.5s ease-out;
+            position: relative;
+            z-index: 1001;
+        }
+
+        .champion-title {
+            font-size: 4em;
+            font-weight: 900;
+            margin-bottom: 20px;
+            text-shadow: 
+                3px 3px 6px rgba(0, 0, 0, 0.5),
+                0 0 20px rgba(255, 255, 255, 0.5);
+            animation: championGlow 2s ease-in-out infinite alternate;
+            letter-spacing: 2px;
+        }
+
+        .champion-name {
+            font-size: 6em;
+            font-weight: 900;
+            margin-bottom: 30px;
+            text-shadow: 
+                4px 4px 8px rgba(0, 0, 0, 0.5),
+                0 0 30px rgba(255, 255, 255, 0.8);
+            animation: championPulse 1s ease-in-out infinite;
+            letter-spacing: 3px;
+            background: linear-gradient(45deg, #ffffff, #ffd700, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% 200%;
+            animation: championPulse 1s ease-in-out infinite, championTextGlow 2s ease-in-out infinite;
+        }
+
+        .champion-teams {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .champion-team-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .champion-team-badge:hover {
+            transform: scale(1.05);
+        }
+
+        .champion-team-badge img {
+            width: 60px;
+            height: 60px;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+        }
+
+        .champion-team-badge span {
+            font-size: 1.2em;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .champion-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .champion-button {
+            padding: 15px 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            color: white;
+            border-radius: 25px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .champion-button:hover {
+            background: white;
+            color: #333;
+            transform: scale(1.05);
+        }
+
+        @keyframes championReveal {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes championBounce {
+            0% { transform: translateY(-100px); opacity: 0; }
+            50% { transform: translateY(20px); opacity: 1; }
+            100% { transform: translateY(0); }
+        }
+
+        @keyframes championGlow {
+            from { 
+                text-shadow: 
+                    3px 3px 6px rgba(0, 0, 0, 0.5), 
+                    0 0 20px rgba(255, 255, 255, 0.5); 
+            }
+            to { 
+                text-shadow: 
+                    3px 3px 6px rgba(0, 0, 0, 0.5), 
+                    0 0 40px rgba(255, 255, 255, 0.8),
+                    0 0 60px rgba(255, 215, 0, 0.6); 
+            }
+        }
+
+        @keyframes championPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes championTextGlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #ffd700;
+            animation: confettiFall 3s linear infinite;
+            z-index: 1001;
+        }
+
+        .confetti:nth-child(odd) {
+            background: #ff6b6b;
+            width: 8px;
+            height: 8px;
+        }
+
+        .confetti:nth-child(3n) {
+            background: #4834d4;
+            width: 12px;
+            height: 12px;
+        }
+
+        .confetti:nth-child(4n) {
+            background: #2ed573;
+            width: 6px;
+            height: 6px;
+        }
+
+        @keyframes confettiFall {
+            0% { 
+                transform: translateY(-100vh) rotate(0deg); 
+                opacity: 1; 
+            }
+            100% { 
+                transform: translateY(100vh) rotate(720deg); 
+                opacity: 0; 
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .team-selection {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .results-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2.2em;
+            }
+            
+            .champion-title {
+                font-size: 2.5em;
+            }
+            
+            .champion-name {
+                font-size: 3.5em;
+            }
+
+            .playoff-teams-new {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .vs-divider-playoff {
+                position: static;
+                transform: none;
+                margin: 10px 0;
+            }
+
+            .champion-teams {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-content {
+                padding: 20px;
+                width: 95%;
+            }
+
+            .players-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-buttons {
+                justify-content: center;
+            }
+
+            .tabs {
+                flex-wrap: wrap;
+            }
+
+            .tab {
+                flex: none;
+                min-width: 120px;
+                padding: 15px 10px;
+                font-size: 0.9em;
+            }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <img src="escudos/Bigote.png" alt="Bigote de Campeones" class="champions-trophy">
+    
+    <div class="container">
+        <div class="header">
+            <h1>TORNEO LA BANDA DEL BIGOTE</h1>
+            <h2>JORNADA 4</h2>
+            
+            <!-- Galería de escudos en el banner -->
+            <div class="banner-shields">
+                <div class="shields-container" id="banner-shields-container">
+                    <!-- Los escudos se cargan dinámicamente -->
+                </div>
+                
+                <!-- Fotos de jugadores debajo de los escudos -->
+                <div class="players-photos-container" id="banner-players-container">
+                    <!-- Las fotos de jugadores se cargan dinámicamente -->
+                </div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('baneos')">🚫 Baneos</button>
+            <button class="tab" onclick="showTab('partidos')">⚽ Partidos</button>
+            <button class="tab" onclick="showTab('tabla')">📊 Tabla General</button>
+            <button class="tab" onclick="showTab('jugadores')">📚 Jugadores</button>
+        </div>
+
+        <!-- Pestaña Baneos -->
+        <div id="baneos" class="tab-content active">
+            <div class="team-selection">
+                <div class="team-card">
+                    <h3>Equipo 1</h3>
+                    <div class="form-group">
+                        <label for="player1-select">Seleccionar Jugador:</label>
+                        <select id="player1-select" onchange="updateTeamOptions('player1-select', 'team1-select', 'team1-preview')">
+                            <option value="">Seleccionar jugador</option>
+                            <option value="Ervin">Ervin</option>
+                            <option value="Joaquin">Joaquin</option>
+                            <option value="Gianluca">Gianluca</option>
+                            <option value="Mauro">Mauro</option>
+                            <option value="Roberto">Roberto</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="team1-select">Seleccionar Equipo:</label>
+                        <select id="team1-select" onchange="updateTeamPreview('team1-select', 'team1-preview')">
+                            <option value="">Primero selecciona un jugador</option>
+                        </select>
+                    </div>
+                    <div id="team1-preview" class="team-preview">
+                        <span>Selecciona un equipo</span>
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <h3>Equipo 2</h3>
+                    <div class="form-group">
+                        <label for="player2-select">Seleccionar Jugador:</label>
+                        <select id="player2-select" onchange="updateTeamOptions('player2-select', 'team2-select', 'team2-preview')">
+                            <option value="">Seleccionar jugador</option>
+                            <option value="Ervin">Ervin</option>
+                            <option value="Joaquin">Joaquin</option>
+                            <option value="Gianluca">Gianluca</option>
+                            <option value="Mauro">Mauro</option>
+                            <option value="Roberto">Roberto</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="team2-select">Seleccionar Equipo:</label>
+                        <select id="team2-select" onchange="updateTeamPreview('team2-select', 'team2-preview')">
+                            <option value="">Primero selecciona un jugador</option>
+                        </select>
+                    </div>
+                    <div id="team2-preview" class="team-preview">
+                        <span>Selecciona un equipo</span>
+                    </div>
+                </div>
+            </div>
+
+            <button id="ban-button" class="ban-button" onclick="generateBans()" disabled>
+                🔒 Selecciona ambos equipos para continuar
+            </button>
+
+            <div id="results" class="results-section">
+                <h3 class="results-title">
+                    🔒 Jugadores Baneados
+                </h3>
+                <div id="results-container" class="results-container"></div>
+                <button class="reiniciar-button" onclick="reiniciarSistema()">Reiniciar Sistema</button>
+            </div>
+        </div>
+
+        <!-- Pestaña Partidos -->
+        <div id="partidos" class="tab-content">
+            <div class="matches-section">
+                <h3 class="section-title">⚽ Fase Regular</h3>
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <button class="reorganize-button" onclick="reorganizeMatches()" style="
+                        background: linear-gradient(135deg, #4834d4 0%, #686de0 100%);
+                        color: white;
+                        border: none;
+                        padding: 12px 24px;
+                        border-radius: 25px;
+                        font-size: 1em;
+                        font-weight: 600;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        box-shadow: 0 4px 15px rgba(72, 52, 212, 0.3);
+                        margin-right: 10px;
+                    " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(72, 52, 212, 0.4)'" 
+                       onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(72, 52, 212, 0.3)'">
+                        🔄 Generar Orden Equilibrado
+                    </button>
+                    <small style="color: #666; display: block; margin-top: 8px; font-style: italic;">
+                        Reorganiza los partidos aleatoriamente manteniendo el equilibrio de rotación
+                    </small>
+                </div>
+                <div id="regular-matches">
+                    <!-- Los partidos se generan dinámicamente -->
+                </div>
+                <button class="update-button" onclick="generatePlayoffs()" style="display: block; margin: 20px auto;">
+                    🏆 Generar Semifinales
+                </button>
+            </div>
+
+            <div class="playoffs-section">
+                <h3 class="section-title">🏆 Playoffs</h3>
+                <div id="playoffs-container">
+                    <p style="text-align: center; color: #666; font-style: italic;">
+                        Los playoffs se generarán automáticamente cuando se complete la fase regular
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pestaña Tabla -->
+        <div id="tabla" class="tab-content">
+            <div class="table-container">
+                <div class="table-title">
+                    📊 Tabla General del Campeonato
+                </div>
+                <table class="standings-table">
+                    <thead>
+                        <tr>
+                            <th>POS</th>
+                            <th>JUGADOR</th>
+                            <th>PJ</th>
+                            <th>PG</th>
+                            <th>PE</th>
+                            <th>PP</th>
+                            <th>GF</th>
+                            <th>GC</th>
+                            <th>DG</th>
+                            <th>PTS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="standings-body">
+                        <!-- La tabla se genera dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- NUEVA PESTAÑA: Jugadores -->
+        <div id="jugadores" class="tab-content">
+            <div class="players-section">
+                <div class="players-header">
+                    <h2>📚 Enciclopedia de Jugadores</h2>
+                    <p>Explora todos los jugadores, equipos y plantillas del torneo</p>
+                </div>
+
+                <div class="search-filters">
+                    <div class="search-box">
+                        <input type="text" id="player-search" placeholder="Buscar jugador, equipo o posición..." onkeyup="filterPlayers()">
+                    </div>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" onclick="filterByPlayer('all')">Todos</button>
+                        <button class="filter-btn" onclick="filterByPlayer('Ervin')">Ervin</button>
+                        <button class="filter-btn" onclick="filterByPlayer('Joaquin')">Joaquin</button>
+                        <button class="filter-btn" onclick="filterByPlayer('Gianluca')">Gianluca</button>
+                        <button class="filter-btn" onclick="filterByPlayer('Mauro')">Mauro</button>
+                        <button class="filter-btn" onclick="filterByPlayer('Roberto')">Roberto</button>
+                    </div>
+                </div>
+
+                <div id="players-grid" class="players-grid">
+                    <!-- Las cartas de jugadores se generan dinámicamente -->
+                </div>
+
+                <div id="no-results" class="no-results" style="display: none;">
+                    <h3>🔍 No se encontraron resultados</h3>
+                    <p>Intenta con otros términos de búsqueda</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Champion Overlay -->
+    <div id="champion-overlay" class="champion-overlay">
+        <div class="champion-content">
+            <div class="champion-title">CAMPEÓN DE LA COPA BIGOTE:</div>
+            <div id="champion-name" class="champion-name">¡¡GIANLUCA!!</div>
+            <div id="champion-teams" class="champion-teams">
+                <!-- Los escudos se agregan dinámicamente -->
+            </div>
+            <div class="champion-buttons">
+                <button class="champion-button" onclick="showStats()">📊 Ver Stats</button>
+                <button class="champion-button" onclick="closeChampionOverlay()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Overlay -->
+    <div id="stats-overlay" class="stats-overlay">
+        <div class="stats-content">
+            <button class="stats-close" onclick="closeStatsOverlay()">×</button>
+            <div class="stats-title">📊 ESTADÍSTICAS DEL TORNEO</div>
+            <div id="stats-grid" class="stats-grid">
+                <!-- Las estadísticas se generan dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Base de datos de jugadores y equipos
+         const playersData = {
+            "Real Madrid": {
+                "Delantero": ["Vini Jr.", "Cristiano Ronaldo", "O. Dembélé", "Rodrygo", "D. Núñez", "T. Werner", "M. Beier"],
+                "Mediocampista": ["F. Valverde", "R. Gravenberch", "João Neves", "A. Güler", "Matheus Cunha", "K. Adeyemi", "F. Kessié"],
+                "Defensa": ["A. Hakimi", "Eder Militao", "M. van de Ven", "Balde", "P. Hincapié", "O. Diomande", "D. Udogie", "Malo Gusto"],
+                "Portero": ["Alisson", "E. Martínez"]
+            },
+            "Manchester United": {
+                "Delantero": ["O. Marmoush", "B. Šeško", "Endrick", "M. Thuram"],
+                "Mediocampista": ["M. Rashford", "Sancet", "Joelinton", "Lamine Yamal", "N. Barella", "E. Camavinga", "Raphinha", "M. Greenwood", "C. Aránguiz", "M. Hjulmand"],
+                "Defensa": ["R. Araujo", "T. Hernández", "F. Kadioglu", "Bremer", "S. Dest", "Fran García", "M. Lacroix", "Ibañez"],
+                "Portero": ["G. Kobel", "G. Vicario"]
+            },
+            "Real Betis": {
+                "Delantero": ["K. Mbappé", "L. Messi", "J. Álvarez", "A. Lookman", "D. Vlahović", "Iago Aspas", "M. Depay"],
+                "Mediocampista": ["J. Kimmich", "Pedri", "H. Calhanoglu", "L. Modric", "Isco", "M. Brozović", "Fabián Ruiz"],
+                "Defensa": ["A. Bastoni", "Marquinhos", "Dimarco", "D. Dumfries", "D. Alaba", "Nacho Fernández", "Diogo Dalot", "B. Pavard"],
+                "Portero": ["Y. Sommer", "J. Pickford"]
+            },
+            "Ajax": {
+                "Delantero": ["A. Griezmann", "G. Martinelli", "A. Mitrović", "E. Haaland", "S. Guirassy"],
+                "Mediocampista": ["D. Rice", "M. Olise", "L. Sané", "Bernardo Silva", "Anderson Talisca", "R. De Paul", "A. Zambo Anguissa", "G. Xhaka", "Casemiro"],
+                "Defensa": ["Gabriel", "Marc Cucurella", "M. Akanji", "Joao Cancelo", "A. Robinson", "K. Walker", "J. Gomez", "M. Hummels"],
+                "Portero": ["T. Courtois", "David Raya"]
+            },
+            "Borussia Dortmund": {
+                "Delantero": ["V. Osimhen", "R. Leao", "B. Saka", "C. Pulisic", "L. Trossard", "B. Mbeumo", "M. Amoura"],
+                "Mediocampista": ["A. Tchouaméni", "Bruno Fernandes", "Vitinha", "K. Coman", "D. Kulusevski", "E. Fernández", "Brais Méndez"],
+                "Defensa": ["Rüdiger", "I. Konaté", "J. Koundé", "F. Mendy", "L. Geertruida", "Nuno Tavares", "O. Aina", "Iñigo Martínez"],
+                "Portero": ["M. ter Stegen", "M. Di Gregorio"]
+            },
+            "Napoli": {
+                "Delantero": ["K. Benzema", "P. Foden", "A. Isak", "A. Sanchez", "D. Doué", "N. Kühn"],
+                "Mediocampista": ["L. Díaz", "N. Kanté", "M. Salah", "F. Wirtz", "A. Mac Allister", "M. Caicedo", "Locatelli", "A. Vidal", "J. Frimpong"],
+                "Defensa": ["Kim Min Jae", "J. Tah", "Carvajal", "M. Kerkez", "F. Acerbi", "Gayà", "T. Livramento"],
+                "Portero": ["Ederson", "G. Mamardashvili"]
+            },
+            "Brentford": {
+                "Delantero": ["V. Gyökeres", "L. Martínez", "K. Kvaratskhelia", "J. Doku"],
+                "Mediocampista": ["Alejandro Garnacho", "Nico Williams", "J. Bellingham", "J. Musiala", "Bruno Guimaraes", "S. Tonali", "P. Dybala", "D. Szoboszlai", "T. Reijnders"],
+                "Defensa": ["W. Saliba", "Ruben Dias", "A. Davies", "Nuno Mendes", "A. Robertson", "Pedro Porro", "M. de Ligt", "W. Pacho", "Marcos Llorente"],
+                "Portero": ["J. Oblak", "Diogo Costa"]
+            },
+            "Fenerbahce": {
+                "Delantero": ["L. Openda", "R. Lukaku", "R. Kolo Muani", "J. Burkardt", "Á. Di María", "J. Olidsson"],
+                "Mediocampista": ["J. Maddison", "M. Kudus", "F. Mastantuono", "K. Yıldız", "Zubimendi", "Francisco Conceição", "E. Palacios", "M. Diaby"],
+                "Defensa": ["E. Tapsoba", "M. Guéhi", "Miguel Gutiérrez", "O. Kossounou", "Arnau Martínez", "L. Hall", "J. Branthwaite"],
+                "Portero": ["Unai Simón", "M. Neuer"]
+            },
+            "Liverpool": {
+                "Delantero": ["R. Lewandowski", "H. Kane", "H. Son", "A. Gordon", "Savinho", "B. Barcola"],
+                "Mediocampista": ["Rodri", "K. De Bruyne", "C. Palmer", "F. de Jong", "M. Ødegaard", "Gavi", "C. Gakpo", "Dani Olmo"],
+                "Defensa": ["V. van Dijk", "N. Schlotterbeck", "N. Aké", "T. Alexander-Arnold", "J. Gvardiol", "B. White", "D. Upamecano", "J. Timber"],
+                "Portero": ["G. Donnarumma", "M. Maignan"]
+            },
+            "Tottenham": {
+                "Delantero": ["O. Watkins", "C. Immobile", "Gonçalo Ramos", "M. Kean", "Evanilson", "H. Ekitiké"],
+                "Mediocampista": ["X. Simons", "M. Rogers", "F. Nmecha", "Y. Fofana", "Álex Baena", "Moleiro", "L. Cabral", "D. Osorio"],
+                "Defensa": ["C. Romero", "Pau Cubarsí", "Murillo", "W. Singo", "A. Wan-Bissaka", "Álvaro Carreras", "A. Cambiaso", "R. Bellanova"],
+                "Portero": ["M. Carnesecchi", "L. Chevalier"]
+            }
+        };
+
+        const playerTeams = {
+            "Ervin": ["Real Madrid", "Manchester United"],
+            "Joaquin": ["Real Betis", "Ajax"],
+            "Gianluca": ["Borussia Dortmund", "Napoli"],
+            "Mauro": ["Brentford", "Fenerbahce"],
+            "Roberto": ["Liverpool", "Tottenham"]
+        };
+
+        const teamLogos = {
+            "Real Madrid": "escudos/real_madrid.png",
+            "Manchester United": "escudos/manchester_united.png",
+            "Real Betis": "escudos/betis.png",
+            "Ajax": "escudos/ajax.png",
+            "Borussia Dortmund": "escudos/borussia_dortmund.png",
+            "Napoli": "escudos/napoli.png",
+            "Brentford": "escudos/brentford.png",
+            "Fenerbahce": "escudos/fenerbahce.png",
+            "Liverpool": "escudos/liverpool.png",
+            "Tottenham": "escudos/tottenham.png"
+        };
+
+        // Variables globales
+        let standings = {
+            "Ervin": { pj: 0, pg: 0, pe: 0, pp: 0, gf: 0, gc: 0, pts: 0 },
+            "Joaquin": { pj: 0, pg: 0, pe: 0, pp: 0, gf: 0, gc: 0, pts: 0 },
+            "Gianluca": { pj: 0, pg: 0, pe: 0, pp: 0, gf: 0, gc: 0, pts: 0 },
+            "Mauro": { pj: 0, pg: 0, pe: 0, pp: 0, gf: 0, gc: 0, pts: 0 },
+            "Roberto": { pj: 0, pg: 0, pe: 0, pp: 0, gf: 0, gc: 0, pts: 0 }
+        };
+
+        let playoffResults = {
+            semifinals: [],
+            final: null,
+            champion: null
+        };
+
+        let playerTeamsUsed = {};
+        let matchData = {};
+        let playoffsGenerated = false;
+        let currentPlayerFilter = 'all';
+        // Funciones de navegación
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            document.getElementById(tabName).classList.add('active');
+            
+            // Buscar y activar la pestaña correspondiente
+            const targetTab = document.querySelector(`[onclick="showTab('${tabName}')"]`);
+            if (targetTab) {
+                targetTab.classList.add('active');
+            }
+
+            if (tabName === 'tabla') {
+                updateStandingsDisplay();
+            } else if (tabName === 'jugadores') {
+                updatePlayersDisplay();
+            }
+        }
+
+        // NUEVA FUNCIÓN: Inicializar pestaña de jugadores
+        function initializePlayersTab() {
+            generatePlayerCards();
+        }
+
+        // NUEVA FUNCIÓN: Generar cartas de jugadores
+        function generatePlayerCards() {
+            const playersGrid = document.getElementById('players-grid');
+            playersGrid.innerHTML = '';
+
+            Object.keys(playerTeams).forEach(playerName => {
+                if (currentPlayerFilter !== 'all' && currentPlayerFilter !== playerName) {
+                    return;
+                }
+
+                const playerCard = createPlayerCard(playerName);
+                playersGrid.appendChild(playerCard);
+            });
+
+            // Verificar si hay resultados
+            const hasResults = playersGrid.children.length > 0;
+            document.getElementById('no-results').style.display = hasResults ? 'none' : 'block';
+        }
+
+        // NUEVA FUNCIÓN: Crear carta de jugador
+        function createPlayerCard(playerName) {
+            const div = document.createElement('div');
+            div.className = 'player-card';
+            div.dataset.player = playerName.toLowerCase();
+
+            // Apodos personalizados para cada jugador
+            const playerNicknames = {
+                'Joaquin': 'El Campeón',
+                'Mauro': 'El Suertudo',
+                'Roberto': 'El Empeñoso',
+                'Gianluca': 'El Aspirante',
+                'Ervin': 'El Destronado'
+            };
+
+            const teams = playerTeams[playerName];
+            const playerStats = standings[playerName];
+            
+            // Calcular estadísticas adicionales
+            const uniquePlayers = new Set();
+            teams.forEach(team => {
+                if (playersData[team]) {
+                    Object.values(playersData[team]).forEach(positions => {
+                        positions.forEach(player => uniquePlayers.add(player));
+                    });
+                }
+            });
+            const totalPlayers = uniquePlayers.size;
+
+            const totalTeams = teams.length;
+            const winRate = playerStats.pj > 0 ? Math.round((playerStats.pg / playerStats.pj) * 100) : 0;
+
+            div.innerHTML = `
+                <div class="player-card-header">
+                    <div class="player-card-avatar ${playerName.toLowerCase()}">
+                        <img src="jugadores/${playerName}.png" alt="${playerName}" 
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                             style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                        <span style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center; font-size: 1.5em; font-weight: bold;">${playerName.charAt(0)}</span>
+                    </div>
+                    <div class="player-card-info">
+                        <h3>${playerName}</h3>
+                        <div class="player-subtitle">${playerNicknames[playerName] || 'Jugador de La Banda del Bigote'}</div>
+                    </div>
+                </div>
+
+                <div class="teams-section">
+                    <h4>🏆 Equipos Disponibles</h4>
+                    <div class="teams-list">
+                        ${teams.map(team => `
+                            <div class="team-badge" onclick="showTeamSquad('${team}', '${playerName}')">
+                                <img src="${teamLogos[team]}" alt="${team}">
+                                <span>${team}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div id="squad-${playerName}" class="squad-preview" style="display: none;">
+                    <!-- El contenido se genera dinámicamente -->
+                </div>
+
+                <div class="stats-summary">
+                    <div class="stat-item">
+                        <span class="stat-number">${totalPlayers}</span>
+                        <span class="stat-label">Jugadores</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">${totalTeams}</span>
+                        <span class="stat-label">Equipos</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">${playerStats.pts}</span>
+                        <span class="stat-label">Puntos</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">${winRate}%</span>
+                        <span class="stat-label">Victorias</span>
+                    </div>
+                </div>
+            `;
+
+            return div;
+        }
+
+        // NUEVA FUNCIÓN: Mostrar plantilla del equipo
+        function showTeamSquad(teamName, playerName) {
+            const squadContainer = document.getElementById(`squad-${playerName}`);
+            const teamData = playersData[teamName];
+            
+            // Siempre mostrar la plantilla del equipo seleccionado
+            squadContainer.innerHTML = `
+                <h5>📋 Plantilla de ${teamName}</h5>
+                ${Object.entries(teamData).map(([position, players]) => `
+                    <div class="position-group">
+                        <strong>${getPositionIcon(position)} ${position}s</strong>
+                        <div class="players-list">
+                            ${players.map(player => `
+                                <span class="player-pill" onclick="searchPlayerOnSofifa('${player}')" style="cursor: pointer; transition: all 0.2s ease;" onmouseover="this.style.backgroundColor='#4834d4'; this.style.color='white';" onmouseout="this.style.backgroundColor=''; this.style.color='';">${player}</span>
+                            `).join('')}
+                        </div>
+                    </div>
+                `).join('')}
+            `;
+            squadContainer.style.display = 'block';
+            
+            // Actualizar el estado visual de los botones de equipo
+            const playerCard = squadContainer.closest('.player-card');
+            const teamBadges = playerCard.querySelectorAll('.team-badge');
+            
+            teamBadges.forEach(badge => {
+                const badgeTeamName = badge.querySelector('span').textContent;
+                if (badgeTeamName === teamName) {
+                    badge.style.background = 'linear-gradient(135deg, #2ed573 0%, #17c0eb 100%)';
+                    badge.style.color = 'white';
+                    badge.style.transform = 'scale(1.05)';
+                } else {
+                    badge.style.background = 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)';
+                    badge.style.color = '#333';
+                    badge.style.transform = 'scale(1)';
+                }
+            });
+        }
+
+        // NUEVA FUNCIÓN: Obtener icono de posición
+        function getPositionIcon(position) {
+            const icons = {
+                'Delantero': '⚽',
+                'Mediocampista': '🎯',
+                'Defensa': '🛡️',
+                'Portero': '🥅'
+            };
+            return icons[position] || '👤';
+        }
+
+        // NUEVA FUNCIÓN: Buscar jugador en SOFIFA
+        function searchPlayerOnSofifa(playerName) {
+            // Limpiar el nombre del jugador para la búsqueda
+            let cleanName = playerName
+                .replace(/\./g, '') // Eliminar puntos
+                .replace(/'/g, '') // Eliminar apostrofes
+                .trim(); // Eliminar espacios al inicio y final
+            
+            // Buscar directamente en SOFIFA
+            const sofifaSearchUrl = `https://sofifa.com/players?keyword=${encodeURIComponent(cleanName)}&type=all`;
+            window.open(sofifaSearchUrl, '_blank');
+        }
+
+        // NUEVA FUNCIÓN: Filtrar por jugador
+        function filterByPlayer(playerName) {
+            currentPlayerFilter = playerName;
+            
+            // Actualizar botones activos
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Regenerar cartas
+            generatePlayerCards();
+            
+            // Limpiar búsqueda
+            document.getElementById('player-search').value = '';
+        }
+
+        // NUEVA FUNCIÓN: Filtrar jugadores por búsqueda
+        function filterPlayers() {
+            const searchTerm = document.getElementById('player-search').value.toLowerCase();
+            const playerCards = document.querySelectorAll('.player-card');
+            let visibleCount = 0;
+
+            playerCards.forEach(card => {
+                const playerName = card.dataset.player;
+                const cardText = card.textContent.toLowerCase();
+                
+                if (cardText.includes(searchTerm)) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Mostrar/ocultar mensaje de no resultados
+            document.getElementById('no-results').style.display = visibleCount === 0 ? 'block' : 'none';
+        }
+
+        // Funciones de baneos (mantener funcionalidad original)
+        function updateTeamOptions(playerSelectId, teamSelectId, previewId) {
+            const playerSelect = document.getElementById(playerSelectId);
+            const teamSelect = document.getElementById(teamSelectId);
+            const selectedPlayer = playerSelect.value;
+
+            teamSelect.innerHTML = '<option value="">Seleccionar equipo</option>';
+
+            if (selectedPlayer && playerTeams[selectedPlayer]) {
+                playerTeams[selectedPlayer].forEach(team => {
+                    const option = document.createElement('option');
+                    option.value = team;
+                    option.textContent = team;
+                    teamSelect.appendChild(option);
+                });
+            }
+
+            updateTeamPreview(teamSelectId, previewId);
+            checkBanButtonState();
+        }
+
+        function updateTeamPreview(teamSelectId, previewId) {
+            const teamSelect = document.getElementById(teamSelectId);
+            const preview = document.getElementById(previewId);
+            const selectedTeam = teamSelect.value;
+
+            if (selectedTeam && teamLogos[selectedTeam]) {
+                preview.innerHTML = `
+                    <img src="${teamLogos[selectedTeam]}" alt="${selectedTeam}">
+                    <span>${selectedTeam}</span>
+                `;
+            } else {
+                preview.innerHTML = '<span>Selecciona un equipo</span>';
+            }
+
+            checkBanButtonState();
+        }
+
+        function checkBanButtonState() {
+            const team1 = document.getElementById('team1-select').value;
+            const team2 = document.getElementById('team2-select').value;
+            const banButton = document.getElementById('ban-button');
+
+            if (team1 && team2) {
+                banButton.disabled = false;
+                banButton.textContent = 'GENERAR BANEOS ALEATORIOS';
+            } else {
+                banButton.disabled = true;
+                banButton.textContent = '🔒 Selecciona ambos equipos para continuar';
+            }
+        }
+
+        function generateBans() {
+            const team1 = document.getElementById('team1-select').value;
+            const team2 = document.getElementById('team2-select').value;
+
+            if (!team1 || !team2) return;
+
+            showLoadingOverlay();
+
+            setTimeout(() => {
+                const team1Bans = generateTeamBans(team1);
+                const team2Bans = generateTeamBans(team2);
+
+                displayBannedPlayers(team1, team1Bans, team2, team2Bans);
+                hideLoadingOverlay();
+            }, 2000);
+        }
+
+        function generateTeamBans(teamName) {
+            const teamData = playersData[teamName];
+            const bannedPlayers = [];
+            const positionCounts = { "Delantero": 0, "Mediocampista": 0, "Defensa": 0, "Portero": 0 };
+
+            while (bannedPlayers.length < 4) {
+                const positions = Object.keys(teamData);
+                const randomPosition = positions[Math.floor(Math.random() * positions.length)];
+
+                if (positionCounts[randomPosition] < 2) {
+                    const players = teamData[randomPosition];
+                    const randomPlayer = players[Math.floor(Math.random() * players.length)];
+
+                    if (!bannedPlayers.some(p => p.name === randomPlayer)) {
+                        bannedPlayers.push({
+                            name: randomPlayer,
+                            position: randomPosition
+                        });
+                        positionCounts[randomPosition]++;
+                    }
+                }
+            }
+
+            return bannedPlayers;
+        }
+
+        function showLoadingOverlay() {
+            const resultsSection = document.getElementById('results');
+            resultsSection.innerHTML = `
+                <div style="text-align: center; padding: 60px;">
+                    <div style="width: 60px; height: 60px; border: 4px solid #f3f3f3; border-top: 4px solid #667eea; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px;"></div>
+                    <h3 style="color: #333; font-size: 1.5em;">Generando baneos aleatorios...</h3>
+                </div>
+            `;
+            resultsSection.classList.add('show');
+        }
+
+        function hideLoadingOverlay() {
+            // La función displayBannedPlayers se encarga de reemplazar el contenido
+        }
+
+        function displayBannedPlayers(team1Name, team1Bans, team2Name, team2Bans) {
+            const resultsSection = document.getElementById('results');
+            
+            resultsSection.innerHTML = `
+                <h3 class="results-title">
+                    🔒 Jugadores Baneados
+                </h3>
+                <div id="results-container" class="results-container">
+                    <div class="team-results">
+                        <h4>
+                            <img src="${teamLogos[team1Name]}" alt="${team1Name}">
+                            ${team1Name}
+                        </h4>
+                        <div id="team1-banned"></div>
+                    </div>
+                    <div class="team-results">
+                        <h4>
+                            <img src="${teamLogos[team2Name]}" alt="${team2Name}">
+                            ${team2Name}
+                        </h4>
+                        <div id="team2-banned"></div>
+                    </div>
+                </div>
+                <button class="reiniciar-button" onclick="reiniciarSistema()">Reiniciar Sistema</button>
+            `;
+
+            resultsSection.classList.add('show');
+
+            setTimeout(() => animatePlayerReveal('team1-banned', team1Bans), 500);
+            setTimeout(() => animatePlayerReveal('team2-banned', team2Bans), 800);
+        }
+
+        function animatePlayerReveal(containerId, players) {
+            const container = document.getElementById(containerId);
+            
+            players.forEach((player, index) => {
+                setTimeout(() => {
+                    const playerElement = createBannedPlayerHTML(player);
+                    container.appendChild(playerElement);
+                    
+                    setTimeout(() => {
+                        playerElement.classList.add('show');
+                        
+                        const nameSpan = playerElement.querySelector('.player-name');
+                        const originalName = nameSpan.textContent;
+                        nameSpan.textContent = '';
+                        
+                        let i = 0;
+                        const typeInterval = setInterval(() => {
+                            nameSpan.textContent += originalName[i];
+                            i++;
+                            if (i >= originalName.length) {
+                                clearInterval(typeInterval);
+                                
+                                setTimeout(() => {
+                                    nameSpan.textContent = `❌ ${originalName}`;
+                                    playerElement.classList.add('banned');
+                                }, 800);
+                            }
+                        }, 50);
+                    }, 100);
+                }, index * 600);
+            });
+        }
+
+        function createBannedPlayerHTML(player) {
+            const div = document.createElement('div');
+            div.className = 'banned-player';
+            div.innerHTML = `
+                <span class="player-name">${player.name}</span>
+                <span class="position-tag ${player.position.toLowerCase()}">${player.position}</span>
+            `;
+            return div;
+        }
+
+        function reiniciarSistema() {
+            document.getElementById('player1-select').value = '';
+            document.getElementById('player2-select').value = '';
+            document.getElementById('team1-select').innerHTML = '<option value="">Primero selecciona un jugador</option>';
+            document.getElementById('team2-select').innerHTML = '<option value="">Primero selecciona un jugador</option>';
+            document.getElementById('team1-preview').innerHTML = '<span>Selecciona un equipo</span>';
+            document.getElementById('team2-preview').innerHTML = '<span>Selecciona un equipo</span>';
+            document.getElementById('results').classList.remove('show');
+            checkBanButtonState();
+        }
+
+        // Funciones de partidos
+        function initializeMatches() {
+            const players = ["Gianluca", "Joaquin", "Ervin", "Mauro", "Roberto"];
+            const matches = [];
+            
+            for (let i = 0; i < players.length; i++) {
+                for (let j = i + 1; j < players.length; j++) {
+                    matches.push([players[i], players[j]]);
+                }
+            }
+
+            const container = document.getElementById('regular-matches');
+            container.innerHTML = '';
+
+            matches.forEach((match, index) => {
+                const matchCard = createMatchCard(match[0], match[1], index);
+                container.appendChild(matchCard);
+            });
+
+            restoreMatchData();
+            updatePlayoffs();
+        }
+
+        function createMatchCard(player1, player2, matchIndex) {
+            const div = document.createElement('div');
+            div.className = 'match-card';
+            div.innerHTML = `
+                <div class="match-teams">
+                    <div class="team-selector">
+                        <span>${player1}</span>
+                        <select id="team1-${matchIndex}" onchange="trackPlayerTeam('${player1}', this.value); updateTeamDisplay('team1-${matchIndex}', 'team1-display-${matchIndex}'); saveMatchData();">
+                            <option value="">Seleccionar equipo</option>
+                            ${playerTeams[player1].map(team => `<option value="${team}">${team}</option>`).join('')}
+                        </select>
+                        <div id="team1-display-${matchIndex}" class="team-selector-with-logo"></div>
+                    </div>
+                    <div class="vs-divider">VS</div>
+                    <div class="team-selector">
+                        <span>${player2}</span>
+                        <select id="team2-${matchIndex}" onchange="trackPlayerTeam('${player2}', this.value); updateTeamDisplay('team2-${matchIndex}', 'team2-display-${matchIndex}'); saveMatchData();">
+                            <option value="">Seleccionar equipo</option>
+                            ${playerTeams[player2].map(team => `<option value="${team}">${team}</option>`).join('')}
+                        </select>
+                        <div id="team2-display-${matchIndex}" class="team-selector-with-logo"></div>
+                    </div>
+                </div>
+                <div class="score-inputs">
+                    <input type="number" id="score1-${matchIndex}" min="0" max="20" placeholder="0" onchange="autoUpdateTable(); saveMatchData();">
+                    <span class="score-divider">-</span>
+                    <input type="number" id="score2-${matchIndex}" min="0" max="20" placeholder="0" onchange="autoUpdateTable(); saveMatchData();">
+                </div>
+            `;
+            div.dataset.player1 = player1;
+            div.dataset.player2 = player2;
+            div.dataset.matchIndex = matchIndex;
+            return div;
+        }
+
+        function updateTeamDisplay(selectId, displayId) {
+            const select = document.getElementById(selectId);
+            const display = document.getElementById(displayId);
+            const selectedTeam = select.value;
+
+            if (selectedTeam && teamLogos[selectedTeam]) {
+                display.innerHTML = `
+                    <img src="${teamLogos[selectedTeam]}" alt="${selectedTeam}">
+                    <span>${selectedTeam}</span>
+                `;
+                display.style.display = 'flex';
+            } else {
+                display.style.display = 'none';
+            }
+        }
+
+        function trackPlayerTeam(player, team) {
+            if (team) {
+                if (!playerTeamsUsed[player]) {
+                    playerTeamsUsed[player] = [];
+                }
+                if (!playerTeamsUsed[player].includes(team)) {
+                    playerTeamsUsed[player].push(team);
+                }
+            }
+        }
+
+        function autoUpdateTable() {
+            updateTable();
+            updateStandingsDisplay();
+            // Actualizar también las cartas de jugadores si estamos en esa pestaña
+            if (document.getElementById('jugadores').classList.contains('active')) {
+                generatePlayerCards();
+            }
+        }
+
+        function saveMatchData() {
+            const matchCards = document.querySelectorAll('.match-card');
+            matchData = {};
+            
+            matchCards.forEach(card => {
+                const matchIndex = card.dataset.matchIndex;
+                const team1Select = document.getElementById(`team1-${matchIndex}`);
+                const team2Select = document.getElementById(`team2-${matchIndex}`);
+                const score1Input = document.getElementById(`score1-${matchIndex}`);
+                const score2Input = document.getElementById(`score2-${matchIndex}`);
+                
+                matchData[matchIndex] = {
+                    team1: team1Select ? team1Select.value : '',
+                    team2: team2Select ? team2Select.value : '',
+                    score1: score1Input ? score1Input.value : '',
+                    score2: score2Input ? score2Input.value : ''
+                };
+            });
+        }
+
+        function restoreMatchData() {
+            Object.keys(matchData).forEach(matchIndex => {
+                const data = matchData[matchIndex];
+                const team1Select = document.getElementById(`team1-${matchIndex}`);
+                const team2Select = document.getElementById(`team2-${matchIndex}`);
+                const score1Input = document.getElementById(`score1-${matchIndex}`);
+                const score2Input = document.getElementById(`score2-${matchIndex}`);
+                
+                if (team1Select && data.team1) {
+                    team1Select.value = data.team1;
+                    updateTeamDisplay(`team1-${matchIndex}`, `team1-display-${matchIndex}`);
+                    trackPlayerTeam(team1Select.closest('.match-card').dataset.player1, data.team1);
+                }
+                
+                if (team2Select && data.team2) {
+                    team2Select.value = data.team2;
+                    updateTeamDisplay(`team2-${matchIndex}`, `team2-display-${matchIndex}`);
+                    trackPlayerTeam(team2Select.closest('.match-card').dataset.player2, data.team2);
+                }
+                
+                if (score1Input && data.score1) {
+                    score1Input.value = data.score1;
+                }
+                
+                if (score2Input && data.score2) {
+                    score2Input.value = data.score2;
+                }
+            });
+            
+            autoUpdateTable();
+        }
+
+        function updateTable() {
+            Object.keys(standings).forEach(player => {
+                standings[player] = { pj: 0, pg: 0, pe: 0, pp: 0, gf: 0, gc: 0, pts: 0 };
+            });
+
+            const matchCards = document.querySelectorAll('.match-card');
+            matchCards.forEach(card => {
+                const player1 = card.dataset.player1;
+                const player2 = card.dataset.player2;
+                const matchIndex = card.dataset.matchIndex;
+                
+                const score1 = parseInt(document.getElementById(`score1-${matchIndex}`).value) || 0;
+                const score2 = parseInt(document.getElementById(`score2-${matchIndex}`).value) || 0;
+
+                if (score1 > 0 || score2 > 0) {
+                    standings[player1].pj++;
+                    standings[player2].pj++;
+                    standings[player1].gf += score1;
+                    standings[player1].gc += score2;
+                    standings[player2].gf += score2;
+                    standings[player2].gc += score1;
+
+                    if (score1 > score2) {
+                        standings[player1].pg++;
+                        standings[player1].pts += 3;
+                        standings[player2].pp++;
+                    } else if (score2 > score1) {
+                        standings[player2].pg++;
+                        standings[player2].pts += 3;
+                        standings[player1].pp++;
+                    } else {
+                        standings[player1].pe++;
+                        standings[player2].pe++;
+                        standings[player1].pts++;
+                        standings[player2].pts++;
+                    }
+                }
+            });
+        }
+
+        // NUEVA FUNCIÓN: Generar rotación equilibrada de partidos (MEJORADA)
+        function generateBalancedRotation() {
+            const players = ["Ervin", "Joaquin", "Gianluca", "Mauro", "Roberto"];
+            const matches = [];
+            const playerMatchCount = {};
+            
+            // Inicializar contadores
+            players.forEach(player => {
+                playerMatchCount[player] = 0;
+            });
+            
+            // Función para mezclar array aleatoriamente (Fisher-Yates)
+            function shuffleArray(array) {
+                const shuffled = [...array];
+                for (let i = shuffled.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+                }
+                return shuffled;
+            }
+            
+            // Función para verificar si un jugador puede jugar (no más de 2 consecutivos)
+            function canPlayerPlay(player, recentMatches) {
+                if (recentMatches.length < 2) return true;
+                
+                const lastMatch = recentMatches[recentMatches.length - 1];
+                const secondLastMatch = recentMatches[recentMatches.length - 2];
+                
+                // No puede jugar si jugó los últimos 2 partidos
+                return !(lastMatch.includes(player) && secondLastMatch.includes(player));
+            }
+            
+            // Función para obtener jugadores disponibles
+            function getAvailablePlayers(recentMatches) {
+                return players.filter(player => canPlayerPlay(player, recentMatches));
+            }
+            
+            // Función para seleccionar pareja equilibrada
+            function selectBalancedPair(availablePlayers, matchCount) {
+                // Ordenar por menos partidos jugados, luego mezclar aleatoriamente
+                const sortedByMatches = availablePlayers.sort((a, b) => matchCount[a] - matchCount[b]);
+                
+                // Agrupar por cantidad de partidos
+                const groups = {};
+                sortedByMatches.forEach(player => {
+                    const count = matchCount[player];
+                    if (!groups[count]) groups[count] = [];
+                    groups[count].push(player);
+                });
+                
+                // Tomar del grupo con menos partidos y mezclar
+                const minMatches = Math.min(...Object.keys(groups).map(Number));
+                const candidatesGroup1 = shuffleArray(groups[minMatches]);
+                
+                if (candidatesGroup1.length >= 2) {
+                    return [candidatesGroup1[0], candidatesGroup1[1]];
+                }
+                
+                // Si no hay suficientes en el grupo mínimo, tomar uno de cada grupo
+                const player1 = candidatesGroup1[0];
+                const remainingPlayers = availablePlayers.filter(p => p !== player1);
+                const player2 = shuffleArray(remainingPlayers)[0];
+                
+                return [player1, player2];
+            }
+            
+            // Generar 10 partidos con máximo equilibrio
+            const recentMatches = [];
+            let attempts = 0;
+            const maxAttempts = 100;
+            
+            while (matches.length < 10 && attempts < maxAttempts) {
+                attempts++;
+                
+                let availablePlayers = getAvailablePlayers(recentMatches);
+                
+                // Si no hay suficientes jugadores disponibles, resetear restricciones
+                if (availablePlayers.length < 2) {
+                    // Limpiar historial reciente para permitir más opciones
+                    if (recentMatches.length > 0) {
+                        recentMatches.shift(); // Remover el partido más antiguo
+                        availablePlayers = getAvailablePlayers(recentMatches);
+                    }
+                    
+                    // Si aún no hay suficientes, usar todos los jugadores
+                    if (availablePlayers.length < 2) {
+                        availablePlayers = [...players];
+                    }
+                }
+                
+                // Seleccionar pareja equilibrada
+                const [player1, player2] = selectBalancedPair(availablePlayers, playerMatchCount);
+                
+                if (player1 && player2 && player1 !== player2) {
+                    const match = [player1, player2];
+                    matches.push({ player1, player2 });
+                    
+                    // Actualizar contadores
+                    playerMatchCount[player1]++;
+                    playerMatchCount[player2]++;
+                    
+                    // Mantener historial de partidos recientes (máximo 3)
+                    recentMatches.push(match);
+                    if (recentMatches.length > 3) {
+                        recentMatches.shift();
+                    }
+                    
+                    // Resetear intentos
+                    attempts = 0;
+                }
+            }
+            
+            // Si no se completaron 10 partidos, llenar con partidos aleatorios equilibrados
+            while (matches.length < 10) {
+                const shuffledPlayers = shuffleArray(players);
+                const player1 = shuffledPlayers[0];
+                const player2 = shuffledPlayers[1];
+                
+                matches.push({ player1, player2 });
+                playerMatchCount[player1]++;
+                playerMatchCount[player2]++;
+            }
+            
+            // Mezclar el orden final de los partidos para mayor aleatoriedad
+            return shuffleArray(matches);
+        }
+
+        // NUEVA FUNCIÓN: Reorganizar partidos manteniendo equilibrio
+        function reorganizeMatches() {
+            // Guardar datos actuales antes de reorganizar
+            saveMatchData();
+            
+            // Generar nueva rotación equilibrada
+            const balancedMatches = generateBalancedRotation();
+            
+            // Regenerar los partidos con el nuevo orden
+            const regularMatches = document.getElementById('regular-matches');
+            regularMatches.innerHTML = '';
+            
+            balancedMatches.forEach((match, index) => {
+                const matchCard = createMatchCard(match.player1, match.player2, index);
+                regularMatches.appendChild(matchCard);
+            });
+            
+            // Restaurar datos guardados si existen
+            restoreMatchData();
+            
+            // Mostrar mensaje de confirmación
+            showReorganizeMessage();
+            
+            // Actualizar tabla y playoffs
+            updatePlayoffs();
+        }
+
+        // NUEVA FUNCIÓN: Mostrar mensaje de reorganización
+        function showReorganizeMessage() {
+            const message = document.createElement('div');
+            message.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #4834d4 0%, #686de0 100%);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                box-shadow: 0 4px 15px rgba(72, 52, 212, 0.3);
+                z-index: 1000;
+                font-weight: 600;
+                animation: slideInRight 0.5s ease;
+            `;
+            message.innerHTML = '🔄 ¡Partidos reorganizados con equilibrio perfecto!';
+            
+            document.body.appendChild(message);
+            
+            // Remover mensaje después de 3 segundos
+            setTimeout(() => {
+                message.style.animation = 'slideOutRight 0.5s ease';
+                setTimeout(() => {
+                    if (message.parentNode) {
+                        message.parentNode.removeChild(message);
+                    }
+                }, 500);
+            }, 3000);
+            
+            // Agregar animaciones CSS si no existen
+            if (!document.getElementById('reorganize-animations')) {
+                const style = document.createElement('style');
+                style.id = 'reorganize-animations';
+                style.textContent = `
+                    @keyframes slideInRight {
+                        from { transform: translateX(100%); opacity: 0; }
+                        to { transform: translateX(0); opacity: 1; }
+                    }
+                    @keyframes slideOutRight {
+                        from { transform: translateX(0); opacity: 1; }
+                        to { transform: translateX(100%); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        function updateStandingsDisplay() {
+            const tbody = document.getElementById('standings-body');
+            if (!tbody) return;
+
+            const sortedPlayers = Object.entries(standings)
+                .map(([name, stats]) => ({ name, ...stats }))
+                .sort((a, b) => {
+                    if (b.pts !== a.pts) return b.pts - a.pts;
+                    const dgA = a.gf - a.gc;
+                    const dgB = b.gf - b.gc;
+                    if (dgB !== dgA) return dgB - dgA;
+                    return b.gf - a.gf;
+                });
+
+            tbody.innerHTML = '';
+            sortedPlayers.forEach((player, index) => {
+                const dg = player.gf - player.gc;
+                const row = document.createElement('tr');
+                
+                // Determinar icono de podio
+                let podiumIcon = '';
+                if (playoffResults.champion === player.name) {
+                    podiumIcon = '🏆';
+                } else if (index === 1) {
+                    podiumIcon = '🥈';
+                } else if (index === 2) {
+                    podiumIcon = '🥉';
+                }
+                
+                row.innerHTML = `
+                    <td class="position-number">${index + 1}</td>
+                    <td>
+                        <div class="player-info">
+                            <div class="player-avatar ${player.name.toLowerCase()}">
+                                <img src="jugadores/${player.name}.png" alt="${player.name}" 
+                                     onerror="this.style.display='none'; this.parentNode.innerHTML='${player.name.charAt(0)}';"
+                                     style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                            </div>
+                            ${player.name} ${podiumIcon}
+                        </div>
+                    </td>
+                    <td>${player.pj}</td>
+                    <td>${player.pg}</td>
+                    <td>${player.pe}</td>
+                    <td>${player.pp}</td>
+                    <td>${player.gf}</td>
+                    <td>${player.gc}</td>
+                    <td class="${dg > 0 ? 'positive' : dg < 0 ? 'negative' : ''}">${dg > 0 ? '+' : ''}${dg}</td>
+                    <td style="font-weight: 700; color: #667eea;">${player.pts}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function generatePlayoffs() {
+            updateTable();
+            updatePlayoffs();
+            playoffsGenerated = true;
+        }
+
+        function updatePlayoffs() {
+            const container = document.getElementById('playoffs-container');
+            
+            const sortedPlayers = Object.entries(standings)
+                .map(([name, stats]) => ({ name, ...stats }))
+                .sort((a, b) => {
+                    if (b.pts !== a.pts) return b.pts - a.pts;
+                    const dgA = a.gf - a.gc;
+                    const dgB = b.gf - b.gc;
+                    if (dgB !== dgA) return dgB - dgA;
+                    return b.gf - a.gf;
+                });
+
+            const totalMatches = sortedPlayers.reduce((sum, player) => sum + player.pj, 0);
+            
+            if (totalMatches < 20 && !playoffsGenerated) {
+                container.innerHTML = `
+                    <p style="text-align: center; color: #666; font-style: italic;">
+                        Los playoffs se generarán automáticamente cuando se complete la fase regular
+                    </p>
+                `;
+                return;
+            }
+
+            const first = sortedPlayers[0];
+            const second = sortedPlayers[1];
+            const third = sortedPlayers[2];
+            const fourth = sortedPlayers[3];
+            const eliminated = sortedPlayers[4];
+
+            container.innerHTML = `
+                <h4 style="color: #ffd700; margin-bottom: 20px; text-align: center;">🏆 Semifinales</h4>
+                
+                <div class="playoff-match">
+                    <div class="playoff-teams-new">
+                        <div class="playoff-team-container">
+                            <div class="playoff-team" id="semi1-team1">
+                                <span>1° ${first.name}</span>
+                            </div>
+                            <input type="number" id="semi1-score1" class="playoff-score-input" min="0" max="20" placeholder="0" onchange="checkForTie('semi1')">
+                        </div>
+                        <div class="vs-divider-playoff">VS</div>
+                        <div class="playoff-team-container">
+                            <div class="playoff-team" id="semi1-team2">
+                                <span>4° ${fourth.name}</span>
+                            </div>
+                            <input type="number" id="semi1-score2" class="playoff-score-input" min="0" max="20" placeholder="0" onchange="checkForTie('semi1')">
+                        </div>
+                    </div>
+                    <div id="semi1-penalty" class="penalty-section">
+                        <div class="penalty-title">⚽ PENALES</div>
+                        <div class="penalty-inputs">
+                            <div class="penalty-team">
+                                <span>${first.name}</span>
+                                <input type="number" id="semi1-penalty1" class="penalty-input" min="0" max="10" placeholder="0">
+                            </div>
+                            <div style="color: white; font-size: 1.5em; font-weight: 700;">-</div>
+                            <div class="penalty-team">
+                                <span>${fourth.name}</span>
+                                <input type="number" id="semi1-penalty2" class="penalty-input" min="0" max="10" placeholder="0">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="playoff-match">
+                    <div class="playoff-teams-new">
+                        <div class="playoff-team-container">
+                            <div class="playoff-team" id="semi2-team1">
+                                <span>2° ${second.name}</span>
+                            </div>
+                            <input type="number" id="semi2-score1" class="playoff-score-input" min="0" max="20" placeholder="0" onchange="checkForTie('semi2')">
+                        </div>
+                        <div class="vs-divider-playoff">VS</div>
+                        <div class="playoff-team-container">
+                            <div class="playoff-team" id="semi2-team2">
+                                <span>3° ${third.name}</span>
+                            </div>
+                            <input type="number" id="semi2-score2" class="playoff-score-input" min="0" max="20" placeholder="0" onchange="checkForTie('semi2')">
+                        </div>
+                    </div>
+                    <div id="semi2-penalty" class="penalty-section">
+                        <div class="penalty-title">⚽ PENALES</div>
+                        <div class="penalty-inputs">
+                            <div class="penalty-team">
+                                <span>${second.name}</span>
+                                <input type="number" id="semi2-penalty1" class="penalty-input" min="0" max="10" placeholder="0">
+                            </div>
+                            <div style="color: white; font-size: 1.5em; font-weight: 700;">-</div>
+                            <div class="penalty-team">
+                                <span>${third.name}</span>
+                                <input type="number" id="semi2-penalty2" class="penalty-input" min="0" max="10" placeholder="0">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="update-button" onclick="updateSemifinals()" style="display: block; margin: 20px auto;">
+                    🏆 Actualizar Semifinales
+                </button>
+
+                <div id="final-container"></div>
+
+                <div style="text-align: center; margin-top: 30px; padding: 20px; background: rgba(255, 107, 107, 0.1); border-radius: 12px;">
+                    <h4 style="color: #ff6b6b; margin-bottom: 10px;">❌ Eliminado del Grupo</h4>
+                    <div style="font-size: 1.2em; font-weight: 600; color: #333;">
+                        5° ${eliminated.name}
+                    </div>
+                </div>
+            `;
+        }
+
+        function checkForTie(matchId) {
+            const score1 = parseInt(document.getElementById(`${matchId}-score1`).value) || 0;
+            const score2 = parseInt(document.getElementById(`${matchId}-score2`).value) || 0;
+            const penaltySection = document.getElementById(`${matchId}-penalty`);
+
+            if (score1 === score2 && score1 > 0) {
+                penaltySection.classList.add('show');
+            } else {
+                penaltySection.classList.remove('show');
+                document.getElementById(`${matchId}-penalty1`).value = '';
+                document.getElementById(`${matchId}-penalty2`).value = '';
+            }
+        }
+
+        function updateSemifinals() {
+            const semi1Score1 = parseInt(document.getElementById('semi1-score1').value) || 0;
+            const semi1Score2 = parseInt(document.getElementById('semi1-score2').value) || 0;
+            const semi2Score1 = parseInt(document.getElementById('semi2-score1').value) || 0;
+            const semi2Score2 = parseInt(document.getElementById('semi2-score2').value) || 0;
+
+            if ((semi1Score1 === 0 && semi1Score2 === 0) || (semi2Score1 === 0 && semi2Score2 === 0)) {
+                alert('Por favor, ingresa los resultados de ambas semifinales');
+                return;
+            }
+
+            const sortedPlayers = Object.entries(standings)
+                .map(([name, stats]) => ({ name, ...stats }))
+                .sort((a, b) => {
+                    if (b.pts !== a.pts) return b.pts - a.pts;
+                    const dgA = a.gf - a.gc;
+                    const dgB = b.gf - b.gc;
+                    if (dgB !== dgA) return dgB - dgA;
+                    return b.gf - a.gf;
+                });
+
+            const first = sortedPlayers[0];
+            const second = sortedPlayers[1];
+            const third = sortedPlayers[2];
+            const fourth = sortedPlayers[3];
+
+            let finalist1, finalist2;
+
+            // Semifinal 1: 1° vs 4°
+            if (semi1Score1 > semi1Score2) {
+                finalist1 = first.name;
+                document.getElementById('semi1-team1').classList.add('winner');
+                document.getElementById('semi1-team2').classList.add('loser');
+            } else if (semi1Score2 > semi1Score1) {
+                finalist1 = fourth.name;
+                document.getElementById('semi1-team2').classList.add('winner');
+                document.getElementById('semi1-team1').classList.add('loser');
+            } else {
+                const penalty1 = parseInt(document.getElementById('semi1-penalty1').value) || 0;
+                const penalty2 = parseInt(document.getElementById('semi1-penalty2').value) || 0;
+                
+                if (penalty1 === penalty2) {
+                    alert('En caso de empate, debe haber un ganador en penales');
+                    return;
+                }
+                
+                if (penalty1 > penalty2) {
+                    finalist1 = first.name;
+                    document.getElementById('semi1-team1').classList.add('winner');
+                    document.getElementById('semi1-team2').classList.add('loser');
+                } else {
+                    finalist1 = fourth.name;
+                    document.getElementById('semi1-team2').classList.add('winner');
+                    document.getElementById('semi1-team1').classList.add('loser');
+                }
+            }
+
+            // Semifinal 2: 2° vs 3°
+            if (semi2Score1 > semi2Score2) {
+                finalist2 = second.name;
+                document.getElementById('semi2-team1').classList.add('winner');
+                document.getElementById('semi2-team2').classList.add('loser');
+            } else if (semi2Score2 > semi2Score1) {
+                finalist2 = third.name;
+                document.getElementById('semi2-team2').classList.add('winner');
+                document.getElementById('semi2-team1').classList.add('loser');
+            } else {
+                const penalty1 = parseInt(document.getElementById('semi2-penalty1').value) || 0;
+                const penalty2 = parseInt(document.getElementById('semi2-penalty2').value) || 0;
+                
+                if (penalty1 === penalty2) {
+                    alert('En caso de empate, debe haber un ganador en penales');
+                    return;
+                }
+                
+                if (penalty1 > penalty2) {
+                    finalist2 = second.name;
+                    document.getElementById('semi2-team1').classList.add('winner');
+                    document.getElementById('semi2-team2').classList.add('loser');
+                } else {
+                    finalist2 = third.name;
+                    document.getElementById('semi2-team2').classList.add('winner');
+                    document.getElementById('semi2-team1').classList.add('loser');
+                }
+            }
+
+            showFinal(finalist1, finalist2);
+        }
+
+        function showFinal(finalist1, finalist2) {
+            const finalContainer = document.getElementById('final-container');
+            finalContainer.innerHTML = `
+                <div class="final-section">
+                    <div class="final-title">🏆 FINAL</div>
+                    <div class="playoff-match" style="background: rgba(255, 255, 255, 0.2); margin-bottom: 20px;">
+                        <div class="playoff-teams-new">
+                            <div class="playoff-team-container">
+                                <div class="playoff-team" id="final-team1" style="background: rgba(255, 255, 255, 0.3);">
+                                    <span>${finalist1}</span>
+                                </div>
+                                <input type="number" id="final-score1" class="playoff-score-input" min="0" max="20" placeholder="0" onchange="checkForTie('final')">
+                            </div>
+                            <div class="vs-divider-playoff">VS</div>
+                            <div class="playoff-team-container">
+                                <div class="playoff-team" id="final-team2" style="background: rgba(255, 255, 255, 0.3);">
+                                    <span>${finalist2}</span>
+                                </div>
+                                <input type="number" id="final-score2" class="playoff-score-input" min="0" max="20" placeholder="0" onchange="checkForTie('final')">
+                            </div>
+                        </div>
+                        <div id="final-penalty" class="penalty-section">
+                            <div class="penalty-title">⚽ PENALES</div>
+                            <div class="penalty-inputs">
+                                <div class="penalty-team">
+                                    <span>${finalist1}</span>
+                                    <input type="number" id="final-penalty1" class="penalty-input" min="0" max="10" placeholder="0">
+                                </div>
+                                <div style="color: white; font-size: 1.5em; font-weight: 700;">-</div>
+                                <div class="penalty-team">
+                                    <span>${finalist2}</span>
+                                    <input type="number" id="final-penalty2" class="penalty-input" min="0" max="10" placeholder="0">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="update-button" onclick="updateFinal('${finalist1}', '${finalist2}')" style="background: rgba(255, 255, 255, 0.2); border: 2px solid white; color: white;">
+                        🏆 Actualizar Final
+                    </button>
+                </div>
+            `;
+        }
+
+        function updateFinal(finalist1, finalist2) {
+            const finalScore1 = parseInt(document.getElementById('final-score1').value) || 0;
+            const finalScore2 = parseInt(document.getElementById('final-score2').value) || 0;
+
+            if (finalScore1 === 0 && finalScore2 === 0) {
+                alert('Por favor, ingresa el resultado de la final');
+                return;
+            }
+
+            let champion;
+            if (finalScore1 > finalScore2) {
+                champion = finalist1;
+                document.getElementById('final-team1').classList.add('winner');
+                document.getElementById('final-team2').classList.add('loser');
+            } else if (finalScore2 > finalScore1) {
+                champion = finalist2;
+                document.getElementById('final-team2').classList.add('winner');
+                document.getElementById('final-team1').classList.add('loser');
+            } else {
+                const penalty1 = parseInt(document.getElementById('final-penalty1').value) || 0;
+                const penalty2 = parseInt(document.getElementById('final-penalty2').value) || 0;
+                
+                if (penalty1 === penalty2) {
+                    alert('En caso de empate, debe haber un ganador en penales');
+                    return;
+                }
+                
+                if (penalty1 > penalty2) {
+                    champion = finalist1;
+                    document.getElementById('final-team1').classList.add('winner');
+                    document.getElementById('final-team2').classList.add('loser');
+                } else {
+                    champion = finalist2;
+                    document.getElementById('final-team2').classList.add('winner');
+                    document.getElementById('final-team1').classList.add('loser');
+                }
+            }
+
+            // Guardar el campeón para mostrar iconos de podio
+            playoffResults.champion = champion;
+            
+            // Actualizar la tabla con iconos de podio
+            updateStandingsDisplay();
+
+            showChampionAnimation(champion);
+        }
+
+        function showStats() {
+            const overlay = document.getElementById('stats-overlay');
+            const statsGrid = document.getElementById('stats-grid');
+            
+            const sortedPlayers = Object.entries(standings)
+                .map(([name, stats]) => ({ name, ...stats }))
+                .sort((a, b) => {
+                    if (b.pts !== a.pts) return b.pts - a.pts;
+                    const dgA = a.gf - a.gc;
+                    const dgB = b.gf - b.gc;
+                    if (dgB !== dgA) return dgB - dgA;
+                    return b.gf - a.gf;
+                });
+
+            const topScorer = sortedPlayers.reduce((max, player) => 
+                player.gf > max.gf ? player : max
+            );
+
+            const bestDefense = sortedPlayers.reduce((min, player) => 
+                player.gc < min.gc ? player : min
+            );
+
+            const mostDraws = sortedPlayers.reduce((max, player) => 
+                player.pe > max.pe ? player : max
+            );
+
+            const bestDifference = sortedPlayers.reduce((max, player) => {
+                const maxDiff = max.gf - max.gc;
+                const playerDiff = player.gf - player.gc;
+                return playerDiff > maxDiff ? player : max;
+            });
+
+            const mostEffective = sortedPlayers.reduce((max, player) => {
+                const maxRatio = player.pj > 0 ? max.pg / max.pj : 0;
+                const playerRatio = player.pj > 0 ? player.pg / player.pj : 0;
+                return playerRatio > maxRatio ? player : max;
+            });
+
+            // Calcular estadísticas de equipos
+            const teamStats = calculateTeamStats();
+            const sortedTeams = Object.entries(teamStats)
+                .map(([team, stats]) => ({ team, ...stats }))
+                .sort((a, b) => {
+                    if (b.winRate !== a.winRate) return b.winRate - a.winRate;
+                    return b.totalGoals - a.totalGoals;
+                });
+
+            const bestTeam = sortedTeams[0];
+            const mostUsedTeam = sortedTeams.reduce((max, team) => 
+                team.timesUsed > max.timesUsed ? team : max
+            );
+            const highestScoringTeam = sortedTeams.reduce((max, team) => 
+                team.avgGoalsPerGame > max.avgGoalsPerGame ? team : max
+            );
+
+            statsGrid.innerHTML = `
+                <div style="grid-column: 1 / -1; margin-bottom: 20px;">
+                    <h3 style="font-size: 1.8em; text-align: center; color: #ffd700; margin-bottom: 20px;">👥 ESTADÍSTICAS DE JUGADORES</h3>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>🥅 Máximo Goleador</h3>
+                    <div class="stat-value">${topScorer.name}</div>
+                    <div class="stat-description">${topScorer.gf} goles anotados</div>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>🛡️ Mejor Defensa</h3>
+                    <div class="stat-value">${bestDefense.name}</div>
+                    <div class="stat-description">${bestDefense.gc} goles recibidos</div>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>⚖️ Rey de los Empates</h3>
+                    <div class="stat-value">${mostDraws.name}</div>
+                    <div class="stat-description">${mostDraws.pe} empates</div>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>📈 Mejor Diferencia</h3>
+                    <div class="stat-value">${bestDifference.name}</div>
+                    <div class="stat-description">+${bestDifference.gf - bestDifference.gc} diferencia de gol</div>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>⚡ Más Efectivo</h3>
+                    <div class="stat-value">${mostEffective.name}</div>
+                    <div class="stat-description">${Math.round((mostEffective.pg / mostEffective.pj) * 100)}% de victorias</div>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>👑 Líder de Grupo</h3>
+                    <div class="stat-value">${sortedPlayers[0].name}</div>
+                    <div class="stat-description">${sortedPlayers[0].pts} puntos totales</div>
+                </div>
+
+                <div style="grid-column: 1 / -1; margin: 30px 0 20px 0;">
+                    <h3 style="font-size: 1.8em; text-align: center; color: #ffd700; margin-bottom: 20px;">🏆 ESTADÍSTICAS DE EQUIPOS</h3>
+                </div>
+
+                <div class="stat-card">
+                    <h3>🥇 Mejor Equipo</h3>
+                    <div class="stat-value" style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                        <img src="${teamLogos[bestTeam.team]}" alt="${bestTeam.team}" style="width: 30px; height: 30px;">
+                        ${bestTeam.team}
+                    </div>
+                    <div class="stat-description">${Math.round(bestTeam.winRate)}% de victorias</div>
+                </div>
+
+                <div class="stat-card">
+                    <h3>⭐ Más Popular</h3>
+                    <div class="stat-value" style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                        <img src="${teamLogos[mostUsedTeam.team]}" alt="${mostUsedTeam.team}" style="width: 30px; height: 30px;">
+                        ${mostUsedTeam.team}
+                    </div>
+                    <div class="stat-description">Usado ${mostUsedTeam.timesUsed} veces</div>
+                </div>
+
+                <div class="stat-card">
+                    <h3>🔥 Más Goleador</h3>
+                    <div class="stat-value" style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                        <img src="${teamLogos[highestScoringTeam.team]}" alt="${highestScoringTeam.team}" style="width: 30px; height: 30px;">
+                        ${highestScoringTeam.team}
+                    </div>
+                    <div class="stat-description">${highestScoringTeam.avgGoalsPerGame.toFixed(1)} goles/partido</div>
+                </div>
+
+                <div style="grid-column: 1 / -1; margin-top: 30px;">
+                    <h3 style="font-size: 1.5em; text-align: center; color: #ffd700; margin-bottom: 20px;">📊 TABLA DE EQUIPOS</h3>
+                    <div style="background: rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 20px; backdrop-filter: blur(10px);">
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr style="border-bottom: 2px solid rgba(255, 255, 255, 0.3);">
+                                    <th style="padding: 10px; text-align: left; color: #ffd700;">Equipo</th>
+                                    <th style="padding: 10px; text-align: center; color: #ffd700;">Usado</th>
+                                    <th style="padding: 10px; text-align: center; color: #ffd700;">Victorias</th>
+                                    <th style="padding: 10px; text-align: center; color: #ffd700;">% Éxito</th>
+                                    <th style="padding: 10px; text-align: center; color: #ffd700;">Goles</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${sortedTeams.map((team, index) => `
+                                    <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                                        <td style="padding: 10px; display: flex; align-items: center; gap: 10px;">
+                                            <img src="${teamLogos[team.team]}" alt="${team.team}" style="width: 25px; height: 25px;">
+                                            <span style="font-weight: 600;">${team.team}</span>
+                                        </td>
+                                        <td style="padding: 10px; text-align: center;">${team.timesUsed}</td>
+                                        <td style="padding: 10px; text-align: center;">${team.wins}</td>
+                                        <td style="padding: 10px; text-align: center; font-weight: 600; color: ${team.winRate >= 60 ? '#2ed573' : team.winRate >= 40 ? '#ffa502' : '#ff6b6b'};">${Math.round(team.winRate)}%</td>
+                                        <td style="padding: 10px; text-align: center;">${team.totalGoals}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+            
+            overlay.classList.add('show');
+        }
+
+        // NUEVA FUNCIÓN: Calcular estadísticas de equipos
+        function calculateTeamStats() {
+            const teamStats = {};
+            
+            // Inicializar estadísticas para todos los equipos
+            Object.keys(teamLogos).forEach(team => {
+                teamStats[team] = {
+                    timesUsed: 0,
+                    wins: 0,
+                    totalGoals: 0,
+                    totalMatches: 0,
+                    winRate: 0,
+                    avgGoalsPerGame: 0
+                };
+            });
+
+            // Recorrer todos los partidos para calcular estadísticas
+            const matchCards = document.querySelectorAll('.match-card');
+            matchCards.forEach(card => {
+                const player1 = card.dataset.player1;
+                const player2 = card.dataset.player2;
+                const matchIndex = card.dataset.matchIndex;
+                
+                const team1Select = document.getElementById(`team1-${matchIndex}`);
+                const team2Select = document.getElementById(`team2-${matchIndex}`);
+                const score1Input = document.getElementById(`score1-${matchIndex}`);
+                const score2Input = document.getElementById(`score2-${matchIndex}`);
+                
+                if (team1Select && team2Select && score1Input && score2Input) {
+                    const team1 = team1Select.value;
+                    const team2 = team2Select.value;
+                    const score1 = parseInt(score1Input.value) || 0;
+                    const score2 = parseInt(score2Input.value) || 0;
+                    
+                    if (team1 && team2 && (score1 > 0 || score2 > 0)) {
+                        // Estadísticas del equipo 1
+                        teamStats[team1].timesUsed++;
+                        teamStats[team1].totalGoals += score1;
+                        teamStats[team1].totalMatches++;
+                        if (score1 > score2) teamStats[team1].wins++;
+                        
+                        // Estadísticas del equipo 2
+                        teamStats[team2].timesUsed++;
+                        teamStats[team2].totalGoals += score2;
+                        teamStats[team2].totalMatches++;
+                        if (score2 > score1) teamStats[team2].wins++;
+                    }
+                }
+            });
+
+            // Calcular porcentajes y promedios
+            Object.keys(teamStats).forEach(team => {
+                const stats = teamStats[team];
+                if (stats.totalMatches > 0) {
+                    stats.winRate = (stats.wins / stats.totalMatches) * 100;
+                    stats.avgGoalsPerGame = stats.totalGoals / stats.totalMatches;
+                }
+            });
+
+            return teamStats;
+        }
+
+        function closeStatsOverlay() {
+            document.getElementById('stats-overlay').classList.remove('show');
+        }
+
+        function showChampionAnimation(champion) {
+            const overlay = document.getElementById('champion-overlay');
+            const championName = document.getElementById('champion-name');
+            const championTeamsContainer = document.getElementById('champion-teams');
+            
+            championName.textContent = `¡¡${champion.toUpperCase()}!!`;
+            
+            championTeamsContainer.innerHTML = '';
+            if (playerTeamsUsed[champion] && playerTeamsUsed[champion].length > 0) {
+                const uniqueTeams = [...new Set(playerTeamsUsed[champion])];
+                uniqueTeams.forEach(team => {
+                    const teamBadge = document.createElement('div');
+                    teamBadge.className = 'champion-team-badge';
+                    teamBadge.innerHTML = `
+                        <img src="${teamLogos[team]}" alt="${team}">
+                        <span>${team}</span>
+                    `;
+                    championTeamsContainer.appendChild(teamBadge);
+                });
+            } else {
+                if (playerTeams[champion]) {
+                    playerTeams[champion].forEach(team => {
+                        const teamBadge = document.createElement('div');
+                        teamBadge.className = 'champion-team-badge';
+                        teamBadge.innerHTML = `
+                            <img src="${teamLogos[team]}" alt="${team}">
+                            <span>${team}</span>
+                        `;
+                        championTeamsContainer.appendChild(teamBadge);
+                    });
+                }
+            }
+            
+            overlay.classList.add('show');
+            playChampionMusic();
+            createConfetti();
+        }
+
+        function playChampionMusic() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                const notes = [
+                    { freq: 261.63, duration: 0.4 }, // C4
+                    { freq: 329.63, duration: 0.4 }, // E4
+                    { freq: 392.00, duration: 0.4 }, // G4
+                    { freq: 523.25, duration: 0.6 }, // C5
+                    
+                    { freq: 587.33, duration: 0.5 }, // D5
+                    { freq: 659.25, duration: 0.5 }, // E5
+                    { freq: 698.46, duration: 0.5 }, // F5
+                    { freq: 783.99, duration: 0.8 }, // G5
+                    
+                    { freq: 880.00, duration: 0.6 }, // A5
+                    { freq: 987.77, duration: 0.6 }, // B5
+                    { freq: 1046.50, duration: 1.0 }, // C6
+                    
+                    { freq: 783.99, duration: 0.5 }, // G5
+                    { freq: 659.25, duration: 0.5 }, // E5
+                    { freq: 523.25, duration: 1.2 }  // C5
+                ];
+                
+                let currentTime = audioContext.currentTime;
+                
+                notes.forEach(note => {
+                    for (let i = 0; i < 3; i++) {
+                        const oscillator = audioContext.createOscillator();
+                        const gainNode = audioContext.createGain();
+                        
+                        oscillator.connect(gainNode);
+                        gainNode.connect(audioContext.destination);
+                        
+                        const harmonic = [1, 1.25, 1.5][i];
+                        oscillator.frequency.setValueAtTime(note.freq * harmonic, currentTime);
+                        
+                        oscillator.type = ['sine', 'triangle', 'sawtooth'][i];
+                        
+                        const volume = [0.3, 0.15, 0.1][i];
+                        gainNode.gain.setValueAtTime(0, currentTime);
+                        gainNode.gain.linearRampToValueAtTime(volume, currentTime + 0.1);
+                        gainNode.gain.exponentialRampToValueAtTime(0.01, currentTime + note.duration);
+                        
+                        oscillator.start(currentTime);
+                        oscillator.stop(currentTime + note.duration);
+                    }
+                    
+                    currentTime += note.duration;
+                });
+            } catch (error) {
+                console.log('Audio no disponible en este navegador');
+            }
+        }
+
+        function createConfetti() {
+            const colors = ['#ffd700', '#ff6b6b', '#4834d4', '#2ed573', '#ffa502'];
+            
+            for (let i = 0; i < 150; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 3 + 's';
+                    confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                    
+                    const size = Math.random() * 8 + 4;
+                    confetti.style.width = size + 'px';
+                    confetti.style.height = size + 'px';
+                    
+                    document.body.appendChild(confetti);
+
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, 8000);
+                }, i * 30);
+            }
+        }
+
+        function closeChampionOverlay() {
+            document.getElementById('champion-overlay').style.display = 'none';
+        }
+
+        // NUEVA FUNCIÓN: Inicializar escudos en el banner
+        function initializeBannerShields() {
+            console.log('Inicializando escudos en el banner...');
+            
+            const shieldsContainer = document.getElementById('banner-shields-container');
+            console.log('Container encontrado:', shieldsContainer);
+            console.log('teamLogos:', teamLogos);
+            
+            if (!shieldsContainer) {
+                console.error('No se encontró el contenedor de escudos');
+                return;
+            }
+            
+            // Limpiar contenedor
+            shieldsContainer.innerHTML = '';
+            
+            // Agregar cada escudo
+            Object.keys(teamLogos).forEach((teamName, index) => {
+                console.log('Creando escudo para:', teamName);
+                
+                const shieldElement = document.createElement('div');
+                shieldElement.className = 'banner-shield';
+                shieldElement.style.animationDelay = `${index * 0.1}s`;
+                
+                shieldElement.innerHTML = `
+                    <img src="${teamLogos[teamName]}" alt="${teamName}" 
+                         onerror="this.style.display='none';">
+                `;
+                
+                shieldsContainer.appendChild(shieldElement);
+            });
+            
+            console.log('Escudos agregados al banner. Total:', shieldsContainer.children.length);
+        }
+
+        // NUEVA FUNCIÓN: Inicializar fotos de jugadores en el banner
+        function initializeBannerPlayers() {
+            console.log('Inicializando fotos de jugadores en el banner...');
+            const playersContainer = document.getElementById('banner-players-container');
+            
+            if (!playersContainer) {
+                console.error('No se encontró el contenedor de jugadores');
+                return;
+            }
+            
+            // Limpiar contenedor
+            playersContainer.innerHTML = '';
+            
+            // Lista de jugadores
+            const players = ['Ervin', 'Gianluca', 'Joaquin', 'Mauro', 'Roberto'];
+            
+            players.forEach((playerName, index) => {
+                console.log('Creando foto para:', playerName);
+                
+                const playerElement = document.createElement('div');
+                playerElement.className = 'banner-player-photo';
+                playerElement.style.animationDelay = `${index * 0.15}s`;
+                
+                playerElement.innerHTML = `
+                    <img src="jugadores/${playerName}.png" alt="${playerName}" 
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="player-initial" style="display: none;">${playerName.charAt(0)}</div>
+                `;
+                
+                playersContainer.appendChild(playerElement);
+            });
+            
+            console.log('Fotos de jugadores agregadas al banner. Total:', playersContainer.children.length);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeMatches();
+            updateStandingsDisplay();
+            initializePlayersTab();
+            initializeBannerShields();
+            initializeBannerPlayers();
+        });
+    </script>
+</body>
+</html>
+
